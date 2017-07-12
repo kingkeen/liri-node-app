@@ -29,9 +29,41 @@ if (userInput[2] === "this-movie") {
 
 //============================================================
 // function for spotify requests
-function spotifys() {
-	console.log("will soon spofify the song: ", userInput[3]);
+function spotifys(song) {
+	// console.log("will soon spotify the song: ", userInput[3]);
 
+	var spotSearch = new spotify(keys.spotifyKeys);
+
+	if (userInput.length > 4) {
+		for (i=3; i < userInput.length; i++){
+			song += userInput[i] + "%20";
+		}
+		// console.log("split song name is: ", song);
+	} 
+	if (userInput.length === 4) {
+		song = userInput[3];
+		console.log("not-split song name is: ", song);
+	} else if (userInput.length < 3) {
+		console.log("No song title was provided, but here is Bicicleta by Shakira and Carlos Vives!!")
+		song = "bicicleta";
+	}
+
+	spotSearch.search({type:'track', query: song, limit: 1}).then(function(response) {
+		// console.log(response);
+		var songReturned = response.tracks.items[0];
+
+
+		// console.log(JSON.stringify(songReturned, null, 4));
+
+
+		// cannot get the Artist name to come up as other than undefined...?! 
+		console.log("Artist: " + songReturned.artists.name);
+		console.log("Song Title: " + songReturned.name);
+		console.log("Preview Link: " + songReturned.preview_url);
+		console.log("Album: " + songReturned.album.name);
+	}).catch(function(err) {
+		console.log(error);
+	});
 
 }
 
@@ -50,9 +82,8 @@ function spotifys() {
 //    * Plot of the movie.
 //    * Actors in the movie.
 
-function omdbs() {
+function omdbs(movieName) {
 	// console.log("will soon call OMDB to get info on movie: ", userInput[3]);
-	var movieName = "";
 	
 	if (userInput.length > 4) {
 		for (i=3; i < userInput.length; i++){
@@ -113,4 +144,55 @@ function twitters() {
 //function to call "do-what-it-says" which I'm not exactly clear about but will call the random file anyways.
 function doWhatSays() {
 	console.log("here will soon be a random thing from the txt file");
+
+	fs.readFile("random.txt", "utf8", function(error, data) {
+		if(error) {
+			return console.log(error);
+		}
+
+		console.log(data);
+
+		var dataArr = data.split(",");
+
+		for (var i=0; i < dataArr.length; i++) {
+			console.log(dataArr[i]);
+
+		}
+		if (dataArr[0] === "this-movie") {
+			omdbs(dataArr[1]);
+		} else if (dataArr[0] === "my-tweets") {
+			twitters();
+		} else if (dataArr[0] === "spotify-this-song") {
+			spotifys(dataArr[1]);
+		} else {
+			console.log("invalid command");
+		}
+
+	})
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
