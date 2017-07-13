@@ -42,7 +42,7 @@ function spotifys(song) {
 	} 
 	if (userInput.length === 4) {
 		song = userInput[3];
-		console.log("not-split song name is: ", song);
+		// console.log("not-split song name is: ", song);
 	} else if (userInput.length < 3) {
 		console.log("No song title was provided, but here is Bicicleta by Shakira and Carlos Vives!!")
 		song = "bicicleta";
@@ -53,11 +53,11 @@ function spotifys(song) {
 		var songReturned = response.tracks.items[0];
 
 
-		// console.log(JSON.stringify(songReturned, null, 4));
+		console.log(JSON.stringify(songReturned, null, 4));
 
 
 		// cannot get the Artist name to come up as other than undefined...?! 
-		console.log("Artist: " + songReturned.artists.name);
+		console.log("Artist: " + songReturned.artists[0].name);
 		console.log("Song Title: " + songReturned.name);
 		console.log("Preview Link: " + songReturned.preview_url);
 		console.log("Album: " + songReturned.album.name);
